@@ -44,6 +44,7 @@ public class HelloWatki {
 		};
 		runnableAnonymousImpl.run();
 
+		//tworzenie watku przez uzycie Lambda i klasy anonimowej implementujacej interface Runnable
 		Thread runnableWithLambda = new Thread(() -> System.out.println("(LAMBDA) Jestem anonimowym watkiem implementujacym Runnable i mam ID = " + Thread.currentThread().getId()));
 		runnableWithLambda.start();
 	}
