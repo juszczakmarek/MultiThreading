@@ -9,26 +9,45 @@ import java.util.Random;
 public class SumaTrzechWatkow {
 
     private static Random random = new Random();
-    private static int result = 0;
+    private static int liczba1 = 0;
+    private static int liczba2 = 0;
+    private static int liczba3 = 0;
+
 
     public static void main(String[] args) {
 
+        Random random = new Random();
 
-        for (int i=0;i<3;i++) {
-            new Thread( () -> {
-                int randomMS = random.nextInt(5000);
+        new Thread ( () -> {
+                SumaTrzechWatkow.liczba1=random.nextInt();
                 try {
-                    Thread.sleep(randomMS);
+                    Thread.sleep(random.nextInt(5000));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                int randomInt = random.nextInt(100);
-                result+=randomInt;
-                System.out.println("Random = " + randomInt + ", current result = " + result);
-            }).start();
+            }
+        ).start();
 
-        }
+        new Thread ( () -> {
+                SumaTrzechWatkow.liczba2=random.nextInt();
+                try {
+                    Thread.sleep(random.nextInt(5000));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        ).start();
 
+        new Thread ( () -> {
+                SumaTrzechWatkow.liczba3=random.nextInt();
+                try {
+                    Thread.sleep(random.nextInt(5000));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        ).start();
+
+        System.out.println("Suma wygenerowanych liczb = " + SumaTrzechWatkow.liczba1 + SumaTrzechWatkow.liczba2 + SumaTrzechWatkow.liczba3);
     }
-
 }
