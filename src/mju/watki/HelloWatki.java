@@ -39,10 +39,13 @@ public class HelloWatki {
 		Runnable runnableAnonymousImpl = new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("Jestem watkiem dziedziczacym po Thread i mam ID = " + Thread.currentThread().getId());
+				System.out.println("Jestem anonimowym watkiem implementujacym Runnable i mam ID = " + Thread.currentThread().getId());
 			}
 		};
 		runnableAnonymousImpl.run();
+
+		Thread runnableWithLambda = new Thread(() -> System.out.println("(LAMBDA) Jestem anonimowym watkiem implementujacym Runnable i mam ID = " + Thread.currentThread().getId()));
+		runnableWithLambda.start();
 	}
 }
 
