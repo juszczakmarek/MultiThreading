@@ -1,4 +1,4 @@
-package watki;
+package mju.watki;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.List;
  * Przykladowa realizacja wzorca obserwator
  * Obserwowany - klasa ktora zarzadza obserwatorami, jest zrodlem zdazen
  * Obserwator reaguje na zdazenie
- * Zdazenie obiekt przenoszacy informacje o zdazeniu
+ * Zdarzenie obiekt przenoszacy informacje o zdazeniu
  * @author mj
  *
  */
@@ -18,7 +18,7 @@ public class WzorzecObserwator implements Obserwowany {
 	public static void main(String[] args) {
 		WzorzecObserwator obserwowany = new WzorzecObserwator();
 		obserwowany.dodajObserwatora(new Obserwator());
-		obserwowany.powiadamiajObserwatorow(new Zdazenie(10));
+		obserwowany.powiadamiajObserwatorow(new Zdarzenie(10));
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class WzorzecObserwator implements Obserwowany {
 	}
 
 	@Override
-	public void powiadamiajObserwatorow(Zdazenie z) {
+	public void powiadamiajObserwatorow(Zdarzenie z) {
 		obserwatorzy.stream().forEach(o -> o.obserwuj(z));
 	}
 
@@ -40,23 +40,21 @@ public class WzorzecObserwator implements Obserwowany {
 
 interface Obserwowany {
 	public void dodajObserwatora(Obserwator o);
-
 	public void usunObserwatora(Obserwator o);
-
-	public void powiadamiajObserwatorow(Zdazenie z);
+	public void powiadamiajObserwatorow(Zdarzenie z);
 }
 
 class Obserwator {
-	public void obserwuj(Zdazenie zdazenie){
-		System.out.println("Obserwuje zdazenie " + zdazenie);
+	public void obserwuj(Zdarzenie zdarzenie){
+		System.out.println("Obserwuje zdarzenie " + zdarzenie);
 	}
 }
 
-class Zdazenie {
+class Zdarzenie {
 	
 	private int wynik;
 
-	public Zdazenie(int i) {
+	public Zdarzenie(int i) {
 		wynik = i;
 	}
 	
