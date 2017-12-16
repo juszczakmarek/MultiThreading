@@ -14,14 +14,18 @@
 package mju.watki.clientServerCommunication;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ClientServer {
 
     public static void main(String[] args) {
-        //serwer działa we własnym wątku
-        //każdy z klientów też działą we własnym wątku
+
+        //Zadanie 1
+        //czy da sie ominac ustawianie serwera dla klienta, przez uzycie setServer
+        //Zadanie 2
+        //zaimplementowac mozliwosc obslugi ograniczonej liczby watkow po stronie serwera
+        //kazdy request przekazywany jest do puli watkow, jezeli ilosc requestow przekracza
+        //dostepna pule watkow to request jest kolejkowany i czeka na mozliwosc wykonania
+        //(zwraca future??)
 
         Server server = new Server();
         Thread serverThread = new Thread(server);
@@ -58,7 +62,6 @@ public class ClientServer {
 class Client implements Runnable {
 
     private Server server;
-    private Connection currentConnection;
 
     public void setServer(Server server) {
         this.server = server;
@@ -77,7 +80,14 @@ class Client implements Runnable {
             Request request = new Request(messageToBeSend);
             Response response = connection.execute(request);
             String result = response.getPayload();
-            System.out.println("Client " + this.hashCode() + " sends " + messageToBeSend + " and recieve's " + result);
+            System.out.println("Client " + this.hashCode() + " Reqeust=" + messageToBeSend + ", response=" + result
+                + ", server id=" + server.toString());
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -98,7 +108,7 @@ class Server implements Runnable {
         System.out.println("*** Server started *** (" + toString() + ")");
         while (true) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
