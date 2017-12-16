@@ -62,7 +62,7 @@ public class SortowanieRownolegle {
         Collections.sort(startingList);
         long nonParallelSortingFinish = (new Date()).getTime();
 
-        System.out.println("Time required for parallel sorting of " + numberOfElements + " using " + numberOfThreads + " = " + (parallelSortingFinish-parallelSortingStart.get()));
+        System.out.println("Time required for parallel sorting of " + numberOfElements + " using " + numberOfThreads + " watkow = " + (parallelSortingFinish-parallelSortingStart.get()));
         System.out.println("Time required for non parallel sorting of " + numberOfElements + " = " + (nonParallelSortingFinish-nonParallelSortingStart));
         System.out.println("Is the merged array equals to sorted starting array - " + (finalResult.equals(startingList)));
     }

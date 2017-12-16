@@ -113,6 +113,36 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../../../OwnProjects/JavaFxTraining/HelloWorldFX/src/com/mju/todolist/Controller.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../../../OwnProjects/JavaFxTraining/HelloWorldFX/src/com/mju/todolist/Main.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../../../OwnProjects/JavaFxTraining/HelloWorldFX/src/com/mju/todolist/dataModel/TodoData.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../../../OwnProjects/JavaFxTraining/HelloWorldFX/src/com/mju/todolist/mainWindow.fxml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../../../OwnProjects/JavaFxTraining/HelloWorldFX/src/com/mju/todolist/todoItemDialog.fxml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../../../OwnProjects/JavaFxTraining/HelloWorldFX/src/com/mju/todolist/trash/testy.java">
+          <value>
+            <set />
+          </value>
+        </entry>
       </map>
     </option>
   </component>
