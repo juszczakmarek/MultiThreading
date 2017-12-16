@@ -38,6 +38,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/mju/watki/Sprzedaz.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/mju/watki/SumOfThreeNumbers.java">
           <value>
             <set />
@@ -58,6 +63,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/mju/watki/TableForPhilosophers.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/mju/watki/UsuwamZeZbiorow.java">
           <value>
             <set />
@@ -68,7 +78,37 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/mju/watki/clientServerCommunication/ClientServer.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/mju/watki/dupa.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/mju/watki/fivePhiloshophers/FivePhilosophersRunner.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/mju/watki/fivePhiloshophers/Fork.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/mju/watki/fivePhiloshophers/Philosopher.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/mju/watki/fivePhiloshophers/Philospher.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/mju/watki/fivePhiloshophers/TableForPhilosophers.java">
           <value>
             <set />
           </value>
