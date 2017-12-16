@@ -15,6 +15,7 @@ package mju.watki.clientServerCommunication;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ClientServer {
 
@@ -46,8 +47,14 @@ public class ClientServer {
             Connection client1Connection = client1.connect(server);
             while (true) {
                 String messageToBeSend = getRandomMessageFromList();
-                Response response = client1Connection.execute(new Request(messageToBeSend));//tutaj mam uzyc response.isDone
-                String result = response.getPayload();
+                Future<Response> response = client1Connection.execute(new Request(messageToBeSend));//tutaj mam uzyc response.isDone
+                String result = null;
+                try {
+                    System.out.println("Server total requests " +server.getCurrentRequest());
+                    result = response.get().getPayload();
+                } catch (Exception e) {
+                    new Exception(e);
+                }
                 System.out.println("Client 1, Reqeust=" + messageToBeSend + ", response=" + result
                         + ", server id=" + server.toString());
                 try {
@@ -64,8 +71,14 @@ public class ClientServer {
             Connection client2Connection = client2.connect(server);
             while (true) {
                 String messageToBeSend = getRandomMessageFromList();
-                Response response = client2Connection.execute(new Request(messageToBeSend));
-                String result = response.getPayload();
+                Future<Response> response = client2Connection.execute(new Request(messageToBeSend));
+                String result = null;
+                try {
+                    System.out.println("Server total requests " +server.getCurrentRequest());
+                    result = response.get().getPayload();
+                } catch (Exception e) {
+                    new Exception(e);
+                }
                 System.out.println("Client 2, Reqeust=" + messageToBeSend + ", response=" + result
                         + ", server id=" + server.toString());
                 try {
@@ -82,8 +95,14 @@ public class ClientServer {
             Connection client3Connection = client3.connect(server);
             while (true) {
                 String messageToBeSend = getRandomMessageFromList();
-                Response response = client3Connection.execute(new Request(messageToBeSend));
-                String result = response.getPayload();
+                Future<Response> response = client3Connection.execute(new Request(messageToBeSend));
+                String result = null;
+                try {
+                    System.out.println("Server total requests " +server.getCurrentRequest());
+                    result = response.get().getPayload();
+                } catch (Exception e) {
+                    new Exception(e);
+                }
                 System.out.println("Client 3, Reqeust=" + messageToBeSend + ", response=" + result
                         + ", server id=" + server.toString());
                 try {
@@ -100,8 +119,14 @@ public class ClientServer {
             Connection client4Connection = client4.connect(server);
             while (true) {
                 String messageToBeSend = getRandomMessageFromList();
-                Response response = client4Connection.execute(new Request(messageToBeSend));
-                String result = response.getPayload();
+                Future<Response> response = client4Connection.execute(new Request(messageToBeSend));
+                String result = null;
+                try {
+                    System.out.println("Server total requests " +server.getCurrentRequest());
+                    result = response.get().getPayload();
+                } catch (Exception e) {
+                    new Exception(e);
+                }
                 System.out.println("Client 4, Reqeust=" + messageToBeSend + ", response=" + result
                         + ", server id=" + server.toString());
                 try {
@@ -118,8 +143,14 @@ public class ClientServer {
             Connection client5Connection = client5.connect(server);
             while (true) {
                 String messageToBeSend = getRandomMessageFromList();
-                Response response = client5Connection.execute(new Request(messageToBeSend));
-                String result = response.getPayload();
+                Future<Response> response = client5Connection.execute(new Request(messageToBeSend));
+                String result = null;
+                try {
+                    System.out.println("Server total requests " +server.getCurrentRequest());
+                    result = response.get().getPayload();
+                } catch (Exception e) {
+                    new Exception(e);
+                }
                 System.out.println("Client 5, Reqeust=" + messageToBeSend + ", response=" + result
                         + ", server id=" + server.toString());
                 try {
@@ -134,7 +165,7 @@ public class ClientServer {
 
     public static String getRandomMessageFromList() {
         Random random = new Random();
-        String[] messagess = {"aBcDe", "FgHi", "jKlM", "nOpR", "qaz123", "JyHuH7s"};
+        String[] messagess = {"aBcDe", "FgHi", "jKlM", "nOpR", "qaz123", "JyHuH7s", "yh&jU", "jm67YHJ"};
         return messagess[random.nextInt(messagess.length - 1)];
     }
 
@@ -155,19 +186,27 @@ class Client {
 
 class Server {
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(2);
+    private ExecutorService executorService = Executors.newFixedThreadPool(10);
+    private int totalRequest = 0;
+    private AtomicInteger currentRequest = new AtomicInteger(0);
 
-    public Response service(Request request) {
-
+    public Future<Response> service(Request request) {
+        totalRequest++;
+        currentRequest.incrementAndGet();
         Future<Response> responseFuture = executorService.submit(() -> {
-                return new Response(request.getPayload());
+            currentRequest.decrementAndGet();
+            return new Response(request.getPayload());
         });
 
         try {
-            return responseFuture.get();
+            return responseFuture;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public int getCurrentRequest() {
+        return currentRequest.intValue();
     }
 }
 
@@ -178,7 +217,7 @@ class Connection {
         this.server = server;
     }
 
-    public Response execute(Request request) {
+    public Future<Response> execute(Request request){
         return server.service(request);
     }
 }
