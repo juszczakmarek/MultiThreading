@@ -14,6 +14,7 @@
 package mju.watki.clientServerCommunication;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 public class ClientServer {
 
@@ -28,43 +29,38 @@ public class ClientServer {
         //(zwraca future??)
 
         Server server = new Server();
-
-        Thread serverThread = new Thread( () -> {
-                System.out.println("*** Server started *** (" + server.toString() + ")");
-                while (true) {
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        Thread serverThread = new Thread(() -> {
+            System.out.println("*** Server started *** (" + server.toString() + ")");
+            while (true) {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-        );
-
-
+        });
         serverThread.start();
 
         Client client1 = new Client();
-        Thread client1Thread = new Thread( ()-> {
-                Connection client1Connection = client1.connect(server);
-                while (true) {
-                    String messageToBeSend = getRandomMessageFromList();
-                    Response response = client1Connection.execute(new Request(messageToBeSend));
-                    String result = response.getPayload();
-                    System.out.println("Client 1, Reqeust=" + messageToBeSend + ", response=" + result
-                            + ", server id=" + server.toString());
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        Thread client1Thread = new Thread(() -> {
+            Connection client1Connection = client1.connect(server);
+            while (true) {
+                String messageToBeSend = getRandomMessageFromList();
+                Response response = client1Connection.execute(new Request(messageToBeSend));//tutaj mam uzyc response.isDone
+                String result = response.getPayload();
+                System.out.println("Client 1, Reqeust=" + messageToBeSend + ", response=" + result
+                        + ", server id=" + server.toString());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-        );
+        });
         client1Thread.start();
 
         Client client2 = new Client();
-        Thread client2Thread = new Thread( ()-> {
+        Thread client2Thread = new Thread(() -> {
             Connection client2Connection = client2.connect(server);
             while (true) {
                 String messageToBeSend = getRandomMessageFromList();
@@ -78,12 +74,11 @@ public class ClientServer {
                     e.printStackTrace();
                 }
             }
-        }
-        );
+        });
         client2Thread.start();
 
         Client client3 = new Client();
-        Thread client3Thread = new Thread( ()-> {
+        Thread client3Thread = new Thread(() -> {
             Connection client3Connection = client3.connect(server);
             while (true) {
                 String messageToBeSend = getRandomMessageFromList();
@@ -97,12 +92,11 @@ public class ClientServer {
                     e.printStackTrace();
                 }
             }
-        }
-        );
+        });
         client3Thread.start();
 
         Client client4 = new Client();
-        Thread client4Thread = new Thread( ()-> {
+        Thread client4Thread = new Thread(() -> {
             Connection client4Connection = client4.connect(server);
             while (true) {
                 String messageToBeSend = getRandomMessageFromList();
@@ -116,12 +110,11 @@ public class ClientServer {
                     e.printStackTrace();
                 }
             }
-        }
-        );
+        });
         client4Thread.start();
 
         Client client5 = new Client();
-        Thread client5Thread = new Thread( ()-> {
+        Thread client5Thread = new Thread(() -> {
             Connection client5Connection = client5.connect(server);
             while (true) {
                 String messageToBeSend = getRandomMessageFromList();
@@ -135,15 +128,14 @@ public class ClientServer {
                     e.printStackTrace();
                 }
             }
-        }
-        );
+        });
         client5Thread.start();
     }
 
     public static String getRandomMessageFromList() {
         Random random = new Random();
         String[] messagess = {"aBcDe", "FgHi", "jKlM", "nOpR", "qaz123", "JyHuH7s"};
-        return messagess[random.nextInt(messagess.length-1)];
+        return messagess[random.nextInt(messagess.length - 1)];
     }
 
 }
@@ -156,42 +148,55 @@ class Client {
         this.server = server;
     }
 
-    Connection connect(Server server){
+    Connection connect(Server server) {
         return new Connection(server);
     }
 }
 
 class Server {
+
+    private ExecutorService executorService = Executors.newFixedThreadPool(2);
+
     public Response service(Request request) {
-        return new Response(request.getPayload());
+
+        Future<Response> responseFuture = executorService.submit(() -> {
+                return new Response(request.getPayload());
+        });
+
+        try {
+            return responseFuture.get();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 
-class Connection{
+class Connection {
     private Server server;
+
     public Connection(Server server) {
         this.server = server;
     }
 
-    public Response execute(Request request){
+    public Response execute(Request request) {
         return server.service(request);
     }
 }
 
-class Request{
+class Request {
     private String payload;
 
-    public Request(String payload){
+    public Request(String payload) {
         this.payload = payload;
     }
 
-    public String getPayload(){
+    public String getPayload() {
 
         String[] payLoadArray = this.payload.split("");
         List<String> payLoadList = new ArrayList<>();
         StringBuilder result = new StringBuilder();
 
-        for (int i=payLoadArray.length-1;i>=0;i--) {
+        for (int i = payLoadArray.length - 1; i >= 0; i--) {
             payLoadList.add(payLoadArray[i]);
         }
 
@@ -208,13 +213,14 @@ class Request{
     }
 }
 
-class Response{
+class Response {
     private String payload;
-    public Response(String payload){
+
+    public Response(String payload) {
         this.payload = payload;
     }
 
-    public String getPayload(){
+    public String getPayload() {
         return payload;
     }
 }
