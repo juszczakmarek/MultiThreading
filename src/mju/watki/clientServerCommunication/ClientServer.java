@@ -28,38 +28,127 @@ public class ClientServer {
         //(zwraca future??)
 
         Server server = new Server();
-        Thread serverThread = new Thread(server);
+
+        Thread serverThread = new Thread( () -> {
+                System.out.println("*** Server started *** (" + server.toString() + ")");
+                while (true) {
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        );
+
+
         serverThread.start();
 
         Client client1 = new Client();
-        client1.setServer(server);
-        Thread client1Thread = new Thread(client1);
+        Thread client1Thread = new Thread( ()-> {
+                Connection client1Connection = client1.connect(server);
+                while (true) {
+                    String messageToBeSend = getRandomMessageFromList();
+                    Response response = client1Connection.execute(new Request(messageToBeSend));
+                    String result = response.getPayload();
+                    System.out.println("Client 1, Reqeust=" + messageToBeSend + ", response=" + result
+                            + ", server id=" + server.toString());
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        );
         client1Thread.start();
 
         Client client2 = new Client();
-        client2.setServer(server);
-        Thread client2Thread = new Thread(client2);
+        Thread client2Thread = new Thread( ()-> {
+            Connection client2Connection = client2.connect(server);
+            while (true) {
+                String messageToBeSend = getRandomMessageFromList();
+                Response response = client2Connection.execute(new Request(messageToBeSend));
+                String result = response.getPayload();
+                System.out.println("Client 2, Reqeust=" + messageToBeSend + ", response=" + result
+                        + ", server id=" + server.toString());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        );
         client2Thread.start();
 
         Client client3 = new Client();
-        client3.setServer(server);
-        Thread client3Thread = new Thread(client3);
+        Thread client3Thread = new Thread( ()-> {
+            Connection client3Connection = client3.connect(server);
+            while (true) {
+                String messageToBeSend = getRandomMessageFromList();
+                Response response = client3Connection.execute(new Request(messageToBeSend));
+                String result = response.getPayload();
+                System.out.println("Client 3, Reqeust=" + messageToBeSend + ", response=" + result
+                        + ", server id=" + server.toString());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        );
         client3Thread.start();
 
         Client client4 = new Client();
-        client4.setServer(server);
-        Thread client4Thread = new Thread(client4);
+        Thread client4Thread = new Thread( ()-> {
+            Connection client4Connection = client4.connect(server);
+            while (true) {
+                String messageToBeSend = getRandomMessageFromList();
+                Response response = client4Connection.execute(new Request(messageToBeSend));
+                String result = response.getPayload();
+                System.out.println("Client 4, Reqeust=" + messageToBeSend + ", response=" + result
+                        + ", server id=" + server.toString());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        );
         client4Thread.start();
 
         Client client5 = new Client();
-        client5.setServer(server);
-        Thread client5Thread = new Thread(client5);
+        Thread client5Thread = new Thread( ()-> {
+            Connection client5Connection = client5.connect(server);
+            while (true) {
+                String messageToBeSend = getRandomMessageFromList();
+                Response response = client5Connection.execute(new Request(messageToBeSend));
+                String result = response.getPayload();
+                System.out.println("Client 5, Reqeust=" + messageToBeSend + ", response=" + result
+                        + ", server id=" + server.toString());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        );
         client5Thread.start();
+    }
+
+    public static String getRandomMessageFromList() {
+        Random random = new Random();
+        String[] messagess = {"aBcDe", "FgHi", "jKlM", "nOpR", "qaz123", "JyHuH7s"};
+        return messagess[random.nextInt(messagess.length-1)];
     }
 
 }
 
-class Client implements Runnable {
+class Client {
 
     private Server server;
 
@@ -70,49 +159,11 @@ class Client implements Runnable {
     Connection connect(Server server){
         return new Connection(server);
     }
-
-    @Override
-    public void run() {
-        System.out.println("Client " + this.hashCode() + " started");
-        while(true) {
-            String messageToBeSend = getRandomMessageFromList();
-            Connection connection = connect(server);
-            Request request = new Request(messageToBeSend);
-            Response response = connection.execute(request);
-            String result = response.getPayload();
-            System.out.println("Client " + this.hashCode() + " Reqeust=" + messageToBeSend + ", response=" + result
-                + ", server id=" + server.toString());
-
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private String getRandomMessageFromList() {
-        Random random = new Random();
-        String[] messagess = {"aBcDe", "FgHi", "jKlM", "nOpR", "qaz123", "JyHuH7s"};
-        return messagess[random.nextInt(messagess.length-1)];
-    }
 }
 
-class Server implements Runnable {
+class Server {
     public Response service(Request request) {
         return new Response(request.getPayload());
-    }
-
-    @Override
-    public void run() {
-        System.out.println("*** Server started *** (" + toString() + ")");
-        while (true) {
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }
 
